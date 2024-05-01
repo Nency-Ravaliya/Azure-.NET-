@@ -66,15 +66,20 @@ jobs:
 
       - name: Uncompress artifact
         run: gzip -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp.gz
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    
+      - name: Check if myapp.zip exists
+        run: ls -l myapp.zip
 
       - name: Unzip artifact
-        run: unzip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp.zip -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp_unzipped
+        run: unzip myapp.zip -d myapp_unzipped
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     
       - name: Upload uncompressed artifact for deployment
         uses: actions/upload-artifact@v3
         with:
             name: .net-app-unzipped
-            path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp_unzipped
+            path: myapp_unzipped
             retention-days: 1
 
       - name: Deploy to Azure Web App
@@ -83,4 +88,4 @@ jobs:
           app-name: 'nency-dotnet-core-application'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7DA76E03FA3D4A729711506FA98F7219 }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp_unzipped
+          package: myapp_unzipped
