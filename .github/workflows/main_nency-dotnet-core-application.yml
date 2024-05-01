@@ -41,11 +41,11 @@ jobs:
           Write-Output "Size of artifact after compression: $($zipSize / 1MB) MB"
         shell: pwsh
 
-      - name: Upload artifact for deployment job
+      - name: Upload compressed artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: myapp
+          path: ${{env.DOTNET_ROOT}}/myapp.zip
 
   deploy:
     runs-on: windows-latest
@@ -58,7 +58,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: myapp
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
