@@ -65,9 +65,9 @@ jobs:
         shell: bash
   
       - name: Unzip artifact
-        run: unzip "${{ env.DOTNET_ROOT }}/myapp.zip" -d "${{ env.DOTNET_ROOT }}/myapp"
+        run: unzip "${{ github.workspace }}/myapp.zip" -d "${{ github.workspace }}/myapp"
         shell: bash
-  
+
       - name: Verify extracted contents
         run: |
           ls -la ${{ env.DOTNET_ROOT }}/myapp
