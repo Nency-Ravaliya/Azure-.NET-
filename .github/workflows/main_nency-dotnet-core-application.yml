@@ -28,22 +28,12 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Measure artifact size before compression
-        run: |
-          du -sh ${{env.DOTNET_ROOT}}/.net-app
-        shell: bash
-
       - name: Compress artifact
         run: |
           cd ${{env.DOTNET_ROOT}}
           zip -r myapp.zip myapp
         working-directory: ${{env.DOTNET_ROOT}}
-
-      - name: Measure artifact size after compression
-        run: |
-          du -sh ${{env.DOTNET_ROOT}}/myapp.zip
-        shell: bash
-
+        
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
