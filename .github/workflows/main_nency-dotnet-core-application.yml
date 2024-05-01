@@ -60,8 +60,7 @@ jobs:
   
       - name: List contents of downloaded artifact
         run: |
-          ls -la ${{ env.DOTNET_ROOT }}/myapp.zip
-          ls -la ${{ env.DOTNET_ROOT }}/myapp
+          ${{ env.DOTNET_ROOT }} ls -la 
         shell: bash
   
       - name: Unzip artifact
