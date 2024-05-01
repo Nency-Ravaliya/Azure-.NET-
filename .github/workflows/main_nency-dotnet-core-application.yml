@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -27,19 +27,17 @@ jobs:
 
       - name: Measure artifact size before compression
         run: |
-          $dirSize = Get-ChildItem -Path ${{env.DOTNET_ROOT}}/myapp -Recurse | Measure-Object -Property Length -Sum
-          Write-Output "Size of artifact before compression: $($dirSize.Sum / 1MB) MB"
-        shell: pwsh
+          du -sh ${{env.DOTNET_ROOT}}/myapp
+        shell: bash
 
       - name: Compress artifact
-        run: Compress-Archive -Path ${{env.DOTNET_ROOT}}/myapp -DestinationPath ${{env.DOTNET_ROOT}}/myapp.zip
-        shell: pwsh
+        run: zip -r ${{env.DOTNET_ROOT}}/myapp.zip ${{env.DOTNET_ROOT}}/myapp
+        shell: bash
 
       - name: Measure artifact size after compression
         run: |
-          $zipSize = (Get-Item -Path ${{env.DOTNET_ROOT}}/myapp.zip).Length
-          Write-Output "Size of artifact after compression: $($zipSize / 1MB) MB"
-        shell: pwsh
+          du -sh ${{env.DOTNET_ROOT}}/myapp.zip
+        shell: bash
 
       - name: Upload compressed artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -48,7 +46,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp.zip
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
@@ -64,16 +62,16 @@ jobs:
         run: |
           ls -la ${{ env.DOTNET_ROOT }}/myapp.zip
           ls -la ${{ env.DOTNET_ROOT }}/myapp
-        shell: pwsh
+        shell: bash
   
       - name: Unzip artifact
-        run: Expand-Archive -Path ${{ env.DOTNET_ROOT }}/myapp.zip -DestinationPath ${{ env.DOTNET_ROOT }}/myapp
-        shell: pwsh
+        run: unzip ${{ env.DOTNET_ROOT }}/myapp.zip -d ${{ env.DOTNET_ROOT }}/myapp
+        shell: bash
   
       - name: Verify extracted contents
         run: |
           ls -la ${{ env.DOTNET_ROOT }}/myapp
-        shell: pwsh
+        shell: bash
   
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
