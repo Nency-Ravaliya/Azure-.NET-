@@ -30,7 +30,7 @@ jobs:
 
       - name: Measure artifact size before compression
         run: |
-          du -sh ${{env.DOTNET_ROOT}}/myapp
+          du -sh ${{env.DOTNET_ROOT}}/.net-app
         shell: bash
 
       - name: Compress artifact
