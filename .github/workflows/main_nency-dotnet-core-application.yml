@@ -67,11 +67,6 @@ jobs:
       - name: Unzip artifact
         run: unzip "${{ github.workspace }}/myapp.zip" -d "${{ github.workspace }}/myapp"
         shell: bash
-
-      - name: Verify extracted contents
-        run: |
-          ls -la ${{ env.DOTNET_ROOT }}/myapp
-        shell: bash
   
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
