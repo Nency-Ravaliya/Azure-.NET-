@@ -29,10 +29,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Compress artifact
-        run: |
-          cd ${{env.DOTNET_ROOT}}
-          zip -r myapp.zip myapp
-        working-directory: ${{env.DOTNET_ROOT}}
+        run: Compress-Archive -Path ${{env.DOTNET_ROOT}}/myapp -DestinationPath ${{env.DOTNET_ROOT}}/myapp.zip
+        shell: pwsh
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
