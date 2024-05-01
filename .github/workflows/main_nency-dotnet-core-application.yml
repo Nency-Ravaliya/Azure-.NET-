@@ -60,6 +60,10 @@ jobs:
         with:
           name: myapp
 
+      - name: Unzip artifact
+        run: Expand-Archive -Path ${{ env.DOTNET_ROOT }}/myapp.zip -DestinationPath ${{ env.DOTNET_ROOT }}/myapp
+        shell: pwsh
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -67,4 +71,4 @@ jobs:
           app-name: 'nency-dotnet-core-application'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7DA76E03FA3D4A729711506FA98F7219 }}
-          package: .
+          package: ${{ env.DOTNET_ROOT }}/myapp
