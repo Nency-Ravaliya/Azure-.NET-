@@ -25,18 +25,18 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Measure artifact size before compression
+      - name: Verify myapp directory contents
         run: |
-          du -sh ${{env.DOTNET_ROOT}}/myapp
+          ls -la ${{env.DOTNET_ROOT}}/myapp
         shell: bash
 
       - name: Compress artifact
         run: zip -r ${{env.DOTNET_ROOT}}/myapp.zip ${{env.DOTNET_ROOT}}/myapp
         shell: bash
 
-      - name: Measure artifact size after compression
+      - name: Verify compression result
         run: |
-          du -sh ${{env.DOTNET_ROOT}}/myapp.zip
+          ls -la ${{env.DOTNET_ROOT}}/myapp.zip
         shell: bash
 
       - name: Upload compressed artifact for deployment job
