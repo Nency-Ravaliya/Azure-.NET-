@@ -42,8 +42,8 @@ jobs:
 
     - name: Compress artifact
       run: gzip -c ${{env.DOTNET_ROOT}}/myapp.zip > ${{env.DOTNET_ROOT}}/myapp.gz
-      working-directory: ${{env.ROOT_PATH}}
-
+      working-directory: ${{env.DOTNET_ROOT}}
+    
     - name: Upload compressed artifact
       uses: actions/upload-artifact@v3
       with:
@@ -66,11 +66,9 @@ jobs:
 
       - name: Uncompress artifact
         run: gzip -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp.gz
-        working-directory: ${{env.ROOT_PATH}}
-    
+
       - name: Unzip artifact
         run: unzip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp.zip -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp_unzipped
-        working-directory: ${{env.ROOT_PATH}}
     
       - name: Upload uncompressed artifact for deployment
         uses: actions/upload-artifact@v3
