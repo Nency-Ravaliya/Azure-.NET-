@@ -61,6 +61,7 @@ jobs:
       - name: List contents of downloaded artifact
         run: |
           ${{ env.DOTNET_ROOT }} ls -la 
+          pwd
         shell: bash
   
       - name: Unzip artifact
