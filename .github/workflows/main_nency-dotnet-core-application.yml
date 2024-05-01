@@ -75,4 +75,4 @@ jobs:
           app-name: 'nency-dotnet-core-application'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7DA76E03FA3D4A729711506FA98F7219 }}
-          package: ${{ env.DOTNET_ROOT }}/myapp
+          package: ${{ github.workspace }}/myapp
