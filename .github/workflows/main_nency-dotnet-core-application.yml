@@ -1,4 +1,4 @@
-name: Deploy to Azure Web App
+name: Build and deploy ASP.Net Core app to Azure Web App - nency-dotnet-core-application
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 env:
-         AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-         DOTNET_VERSION: '8.x'           # set this to the dot net version to use
-         ROOT_PATH: './calculator'
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '8.x'           # set this to the dot net version to use
+  ROOT_PATH: './calculator'
 
 jobs:
   build:
@@ -36,11 +36,15 @@ jobs:
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
       working-directory: ${{env.ROOT_PATH}}
 
+    - name: Compress artifact
+      run: zip -r ${{env.DOTNET_ROOT}}/myapp.zip ${{env.DOTNET_ROOT}}/myapp
+      working-directory: ${{env.ROOT_PATH}}
+
     - name: Upload artifact for deployment 
       uses: actions/upload-artifact@v3
       with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/myapp.zip
           retention-days: 1
   
   deploy:
